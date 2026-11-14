@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I love you ❤️</title>
+<meta property="og:title" content="I love you ❤️">
+<meta property="og:description" content="Открой — там кое-что для тебя">
+<style>
+:root{--bg:#1a0510;--fg:#ff6fa5;--dim:#b03a6b;--hl:#ffc2da;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a0510;--fg:#ff6fa5;--dim:#b03a6b;--hl:#ffc2da}}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:ui-monospace,Menlo,Consolas,monospace;overflow:hidden}
+#out{height:100%;overflow:hidden;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;font-size:14px;line-height:1.5}
+.l{white-space:nowrap;overflow:hidden;text-overflow:clip;animation:in .25s ease-out}
+.l b{color:var(--hl);font-weight:normal}.l i{color:var(--dim);font-style:normal}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#hint{position:fixed;right:10px;top:calc(env(safe-area-inset-top,0px) + 6px);font-size:11px;color:var(--dim)}
+#out{position:relative;z-index:1}
+.h{position:fixed;bottom:-50px;z-index:0;pointer-events:none;animation:up linear forwards}
+@keyframes up{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+</style>
+</head>
+<body>
+<div id="hint">нажми — пауза</div>
+<div id="out"></div>
+<script>
+var out=document.getElementById("out"),paused=false,n=0;
+var hearts=["❤️","💖","💕","💗","💘","💞","💓","♥"];
+var phrases=["Люблю тебя","Ты моё солнце","Я думаю о тебе","Ты — моё всё","Ты — моё счастье","Всегда рядом","Be mine","Forever yours","You are my everything","Ты в моём сердце"];
+function r(a){return a[Math.floor(Math.random()*a.length)]}
+function hex(k){var s="";for(var i=0;i<k;i++)s+=Math.floor(Math.random()*16).toString(16);return s}
+function line(){
+  var t=Math.random(),time=new Date().toLocaleTimeString("ru-RU");
+  if(t<.45)return "<b>"+r(hearts)+" I love you "+r(hearts)+"</b>";
+  if(t<.7)return "<i>["+time+"]</i> "+r(phrases)+" "+r(hearts);
+  if(t<.85)return r(hearts)+r(hearts)+r(hearts)+" <b>I love you</b> "+r(hearts)+r(hearts)+r(hearts);
+  return "<i>—</i> "+r(phrases)+" · №"+n+" "+r(hearts);
+}
+function add(){
+  if(paused)return;
+  var d=document.createElement("div");d.className="l";d.innerHTML=line();out.appendChild(d);n++;
+  while(out.children.length>Math.ceil(window.innerHeight/21)+2)out.removeChild(out.firstChild);
+}
+(function loop(){add();setTimeout(loop,25+Math.random()*60)})();
+setInterval(function(){if(paused)return;var h=document.createElement("div");h.className="h";h.textContent=r(hearts);h.style.left=Math.random()*100+"vw";h.style.fontSize=(16+Math.random()*34)+"px";h.style.opacity=.2+Math.random()*.4;h.style.animationDuration=(3+Math.random()*3)+"s";document.body.appendChild(h);setTimeout(function(){h.remove()},6500)},110);
+document.body.addEventListener("click",function(){paused=!paused;document.getElementById("hint").textContent=paused?"пауза — нажми снова":"нажми — пауза"});
+</script>
+</body>
+</html>
